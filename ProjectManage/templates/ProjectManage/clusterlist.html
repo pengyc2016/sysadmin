@@ -1,0 +1,101 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    集群展示
+{% endblock %}
+
+{% block rcontent %}
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "clusterlist" as theclusterlist %}
+            <a class="btn btn-default {%if request.path = theclusterlist %} active {%endif%}" href={{ theclusterlist }}><span class="glyphicon glyphicon-edit"></span>集群展示</a>
+            {% url "clusterinput" as theclusterinput %}
+            <a class="btn btn-default {%if request.path =  theclusterinput %} active {%endif%}" href={{ theclusterinput }}><span class="glyphicon glyphicon-list"></span>集群录入</a>
+            {% url "clusterflush" as theclusterflush %}
+            <a class="btn btn-default {%if request.path = theclusterflush %} active {%endif%}" href={{ theclusterflush }}><span class="glyphicon glyphicon-edit"></span>刷新集群信息</a>
+        </div>
+    </div>
+
+    <hr/>
+    <form class="form-inline" id="clusterqueryForm" role="form" action=""  method="GET">
+  	<div class="form-group">
+            <label class="sr-only" for="clustername">集群名</label>
+            <input type="text" class="form-control" id="clustername" name="clustername" placeholder="集群名">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="platform">平台</label>
+            <input type="text" class="form-control" id="platform" name="platform" placeholder="平台">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="vcaddress">VCIP地址</label>
+            <input type="text" class="form-control" id="vcaddress"  name="vcaddress" placeholder="VCIP地址">
+       </div>
+       <button type="button" name ="query" class="btn btn-default" onclick="is_submit(1)">查询</button>
+       <button type="button" name ="export" class="btn btn-primary" onclick="is_submit(2)">导出集群</button>
+</form>
+
+    <hr/>
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>集群名</th>
+            <th>平台</th>
+            <th>管理地址</th>
+            <th>网段组</th>
+            <th>存储组</th>
+            <th>总存储</th>
+            <th>已用存储</th>
+            <th>剩余存储</th>
+            <th>总CPU核数</th>
+            <th>已用CPU核数</th>
+            <th>剩余CPU</th>
+            <th>总内存</th>
+            <th>已用内存</th>
+            <th>剩余内存</th>
+            <th>操作</th>
+        </tr>
+
+            {% for i in lPage %}
+                <tr style="font-size: 14px;">
+                    <td>{{ i.clustername }}</td>
+                    <td>{{ i.platform}}</td>
+                    <td>{{ i.vcaddress}}</td>
+                    <td>{{ i.vlangroup}}</td>
+                    <td>{{ i.storagegroup}}</td>
+                    <td>{{ i.ttstorage}}</td>
+                    <td>{{ i.usedstorage}}</td>
+                    <td>{{ i.systorage}}</td>
+                    <td>{{ i.ttcore}}</td>
+                    <td>{{ i.usedcore}}</td>
+                    <td>{{ i.sycore}}</td>
+                    <td>{{ i.ttmem}}</td>
+                    <td>{{ i.usedmem}}</td>
+                    <td>{{ i.symem}}</td>
+                    <td class="host_buttom">
+                        <a class="btn btn-warning btn-xs"  href={% url "clusteredit" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>
+                        <a class="btn btn-danger btn-xs" href={% url "clusterdelete" i.id %} onclick="return confirm('是否确认删除？')">删除</a>
+                        <a class="btn btn-primary btn-xs" href={% url "clustershowpm" i.id %} >PM</a>
+                        <a class="btn btn-default btn-xs" href={% url "clustershowvm" i.id %} >VM</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+    {% include "common/paginator.html" %}
+<script>
+   function is_submit(value){
+      var form=$("#clusterqueryForm") 
+      if (value==1){
+         form.action="{% url 'clusterquery' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+      if (value==2){
+         form.action="{% url 'clusterexport' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+   }
+</script>
+{% endblock %}

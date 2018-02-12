@@ -1,0 +1,54 @@
+{% extends "common/base.side.html" %}
+{% block title %}
+    Apache安装帮助
+{% endblock %}
+
+{% block rcontent %}
+<div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "apache" as theapache %}
+            <a class="btn btn-default {%if request.path = theapache %} active {%endif%}" href={{ theapache }}><span class="glyphicon glyphicon-edit"></span>Apache安装</a>
+            {% url "apachehelp" as theapachehelp %}
+            <a class="btn btn-default {%if request.path =  theapachehelp %} active {%endif%}" href={{ theapachehelp }}><span class="glyphicon glyphicon-list"></span>安装帮助</a>
+        </div>
+    </div>
+
+    <hr/>
+<style type="text/css">
+h3{
+  color:blue;
+}
+h5{
+  font-size: 14px;
+  font-weight:normal;
+}
+</style>
+
+
+    <div >
+    <h3>安装原理</h3>
+    <ol>
+        <li><h5>通过表单获取安装ip地址</h5></li>
+        <li><h5>将上述信息通过位置变量传递给shell脚本</h5></li>
+        <li><h5>通过python调用22.188.62.20上的apache_single.sh脚本安装</h5></li>
+    </ol>
+    <hr/>
+
+    <h3 >使用范围</h3>
+    <ol>
+        <li><h5>服务保障环境</h5></li>
+    </ol>
+    <hr/>
+    <h3 style="color:red;">注意事项</h3>
+    <ol >
+        <li><h5 >请确保机器GSS关闭，避免ssh连接超时</h5></li>
+        <li><h5 >单机安装apache默认不带mod_cluster</h5></li>
+    </ol>
+    <hr/>
+    </div>  
+
+{% endblock %}
+
+
+
+

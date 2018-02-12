@@ -1,0 +1,47 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+   存储组展示 
+{% endblock %}
+:
+{% block rcontent %}
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "storagegroupinput" as thestoragegroupinput %}
+            <a class="btn btn-default {%if request.path = thestoragegroupinput%} active {%endif%}" href={{ thestoragegroupinput }}><span class="glyphicon glyphicon-edit"></span>存储组录入</a>
+            {% url "storagegrouplist" as thestoragegrouplist %}
+            <a class="btn btn-default {%if request.path = thestoragegrouplist%} active {%endif%}" href={{ thestoragegrouplist }}><span class="glyphicon glyphicon-list"></span>存储组展示</a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>存储组</th>
+            <th>存储大小(G)</th>
+            <th>存储已用大小(G)</th>
+            <th>存储可用大小(G)</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+
+        {% for i in lPage %}
+            <tr style="font-size: 13px;">
+                <td>{{ i.storagegroupname }} </td>
+                <td>{{ i.ttstorage }} </td>
+                <td>{{ i.usedstorage }} </td>
+                <td>{{ i.systorage }} </td>
+                <td>{{ i.remark }} </td>
+
+                <td>
+                    <a href={% url "storagegroupedit" i.id %} onclick="return confirm('确认编辑存储组吗？？')"><span class="glyphicon glyphicon-edit btn-xs"></span></a>
+                    <a href={% url "storagegroupdelete" i.id %} onclick="return confirm('确认删除存储组吗？？')"><span class="glyphicon glyphicon-trash btn-xs"></span></a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    {% include "common/paginator.html" %}
+{% endblock %}

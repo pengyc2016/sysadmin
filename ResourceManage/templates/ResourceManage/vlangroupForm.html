@@ -1,0 +1,57 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    网段组录入
+{% endblock %}
+
+{% block head %}
+    <script src="/static/js/jquery.bootstrap-duallistbox.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-duallistbox.css">
+{% endblock %}
+
+{% block rcontent %}
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "vlangroupinput" as thevlangroupinput %}
+            <a class="btn btn-default {%if request.path = thevlangroupinput%} active {%endif%}" href={{ thevlangroupinput }}><span class="glyphicon glyphicon-edit"></span>网段组录入</a>
+            {% url "vlangrouplist" as thevlangrouplist %}
+            <a class="btn btn-default {%if request.path = thevlangrouplist%} active {%endif%}" href={{ thevlangrouplist }}><span class="glyphicon glyphicon-list"></span>网段组展示</a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <form class="form-horizontal" role="form" action={% url "vlangroupinput" %} method="POST" >
+    {% csrf_token %}
+
+        {% for item in form %}
+            <div class="form-group">
+                <label class="control-label col-md-1">{{item.label}}</label>
+                <div class="col-md-11">
+                    {{item}}
+                </div>
+                <div class="col-md-offset-1 col-md-10">
+                    {{item.errors}}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-10">
+                <button type="submit" class="btn btn-danger btn-sm">新 增</button>
+            <div>
+        </div>
+
+    </form>
+
+    <script>
+        var demo1 = $('select[name="vlan"]').bootstrapDualListbox({
+              nonSelectedListLabel: '可选择网段',
+              selectedListLabel: '已选择网段',
+              preserveSelectionOnMove: 'moved',
+              moveOnSelect: false,
+        });
+    </script>
+
+
+{% endblock %}

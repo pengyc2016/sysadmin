@@ -1,0 +1,151 @@
+{% extends "common/base.side.html" %}
+{% block title %}
+    项目录入
+{% endblock %}
+
+{% block rcontent %}
+<!--
+<script >
+        $(document).ready(function(){
+            $ajaxSetup({
+                data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+            }); 
+
+            $('#mongoForm').submit(function(){
+                var mongolist = $('#id_mongolist').val();
+                var apachelist = $('#id_apachelist').val();
+                var mongoversion = $('#id_mongoversion').val();
+                var sysname = $('#id_sysname').val();
+                var password = $('#id_password').val();
+                
+                $.ajax({
+                    type:"POST",
+		    data:{'mongolist':mongolist,'apachelist':apachelist,'mongoversion':mongoversion,'sysname':sysname,'password':password},   
+                    url: "/install/mongo/",
+                    dateType:"html",
+                    cache:"false"
+                    success:function(ret){$('#result').html(ret);}
+                    /*
+                    success:function(data){
+                        $("#id_mongolist").show();
+                        $("#id_apachelist").show();
+                        $("#id_mongoversion").show();
+                        $("#id_sysname").show();
+                        $("#id_password").show();
+                        $("#result").show();
+                        $("#result").attr("value",data);
+                    } */
+                });
+
+             /* $.get("/install/mongo/",{'mongolist':mongolist,'apachelist':apachelist,'mongoversion':mongoversion,'sysname':sysname,'password':password},function(ret){$('#result').html(ret)}) */
+                  
+            });
+        });
+
+</script>
+-->
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "projectlist" as theprojectlist %}
+            <a class="btn btn-default {%if request.path = theprojectlist %} active {%endif%}" href={{ theprojectlist }}><span class="glyphicon glyphicon-edit"></span
+>项目展示</a>
+            {% url "projectinput" as theprojectinput %}
+            <a class="btn btn-default {%if request.path =  theprojectinput %} active {%endif%}" href={{ theprojectinput }}><span class="glyphicon glyphicon-list"></s
+pan>项目录入</a>
+        </div>
+    </div>
+
+    <hr/>
+  
+    <form class="form-horizontal " id="projectForm" role="form" action={% url "projectinput" %} method="POST" >
+        {% csrf_token %}
+        {% for item in form %}
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">{{item.label}}</label>
+                <div class="col-md-4">
+                    {{item}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{item.errors}}
+                </div>
+            </div>
+        {% endfor %}
+        <!--
+        <table style="font-size: 14px;" class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th >{{ form.prj_name.label }}</th>
+            <td >{{ form.prj_name }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.jiancheng.label }}</th>
+            <td >{{ form.jiancheng }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.env.label }}</th>
+            <td>{{ form.env }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.manager.label }}</th>
+            <td>{{ form.manager }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.start_time.label }}</th>
+            <td>{{ form.start_time }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.end_time.label }}</th>
+            <td>{{ form.end_time }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.finish_time.label }}</th>
+            <td>{{ form.finish_time }}</td>
+        </tr>
+
+        </tr>
+            <th>{{ form.pici.label }}</th>
+            <td>{{ form.pici }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.reason.label }}</th>
+            <td>{{ form.reason }}</td>
+        </tr>
+
+        <tr>
+            <th>{{ form.beizhu.label }}</th>
+            <td>{{ form.beizhu }}</td>
+        </tr>
+        {{ form.as_table }}
+        </table>
+        -->
+
+        <div class="form-group">
+            <div class="col-md-4 col-md-offset-1">
+                <button type="submit" id="install" class="btn btn-primary btn-default btn-block ">提交</button>
+            </div>
+        </div>
+    </form>
+<script type="text/javascript">
+        $('.form_datetime').datetimepicker({
+                                               language: 'zh-CN',
+                                               weekStart: 1,
+                                               todayBtn: 1,
+                                               autoclose: 1,
+                                               todayHighlight: 1,
+                                               startView: 2,
+                                               forceParse: 0,
+                                               showMeridian: 1
+                                           });
+</script>
+{% endblock %}
+
+
+
+

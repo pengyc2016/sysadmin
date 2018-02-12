@@ -1,0 +1,14 @@
+*.py[cod]
+.idea
+test.py
+db.sqlite3
+*.so
+*.egg
+*.egg-info
+dist
+build
+eggs
+.project
+.pydevproject
+*.log
+

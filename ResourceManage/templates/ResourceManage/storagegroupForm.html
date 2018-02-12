@@ -1,0 +1,49 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    存储组录入
+{% endblock %}
+
+{% block head %}
+    <script src="/static/js/jquery.bootstrap-duallistbox.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap-duallistbox.css">
+{% endblock %}
+
+{% block rcontent %}
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "storagegroupinput" as thestoragegroupinput %}
+            <a class="btn btn-default {%if request.path = thestoragegroupinput%} active {%endif%}" href={{ thestoragegroupinput }}><span class="glyphicon glyphicon-edit"></span>存储组录入</a>
+            {% url "storagegrouplist" as thestoragegrouplist %}
+            <a class="btn btn-default {%if request.path = thestoragegrouplist%} active {%endif%}" href={{ thestoragegrouplist }}><span class="glyphicon glyphicon-list"></span>存储组展示</a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <form class="form-horizontal" role="form" action={% url "storagegroupinput" %} method="POST" >
+    {% csrf_token %}
+
+        {% for item in form %}
+            <div class="form-group">
+                <label class="control-label col-md-1">{{item.label}}</label>
+                <div class="col-md-4">
+                    {{item}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{item.errors}}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="form-group">
+            <div class="col-md-offset-1 col-md-4">
+                <button type="submit" class="btn btn-danger btn-sm">新 增</button>
+            <div>
+        </div>
+
+    </form>
+
+
+
+{% endblock %}

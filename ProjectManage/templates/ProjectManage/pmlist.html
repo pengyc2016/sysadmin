@@ -1,0 +1,98 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    物理机展示
+{% endblock %}
+
+{% block rcontent %}
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "pmlist" as thepmlist %}
+            <a class="btn btn-default {%if request.path = thepmlist %} active {%endif%}" href={{ thepmlist }}><span class="glyphicon glyphicon-edit"></span>物理机展示</a>
+            {% url "pminput" as thepminput %}
+            <a class="btn btn-default {%if request.path =  thepminput %} active {%endif%}" href={{ thepminput }}><span class="glyphicon glyphicon-list"></span>物理机录入</a>
+        </div>
+    </div>
+
+    <hr/>
+    <form class="form-inline" id="pmqueryForm" role="form" action="" method="GET">
+        <div class="form-group">
+            <label class="sr-only" for="pmname">物理机名称</label>
+            <input type="text" class="form-control" id="pmname" name="pmname" placeholder="物理机名称">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="os">操作系统</label>
+            <input type="text" class="form-control" id="os" name="os" placeholder="操作系统">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="ip">IP地址</label>
+            <input type="text" class="form-control" id="ip"  name="ip" placeholder="ip地址">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="pmtype">管理地址</label>
+            <input type="text" class="form-control" id="pmtype"  name="pmtype" placeholder="设备类型">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="cluster">物理机角色</label>
+            <input type="text" class="form-control" id="role" name="role" placeholder="物理机角色">
+       </div>
+       <button type="submit" class="btn btn-default" onclick="is_submit(1)">查询</button>
+       <button type="submit" class="btn btn-primary" onclick="is_submit(2)">导出物理机</button>
+</form>
+    <hr/>
+
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>主机名</th>
+            <th>IP地址</th>
+            <th>管理地址</th>
+            <th>序列号</th>
+            <th>机房</th>
+            <th>机柜位</th>
+            <th>机柜号</th>
+            <th>设备类型</th>
+            <th>操作系统</th>
+            <th>所属集群</th>
+            <th>操作</th>
+        </tr>
+
+            {% for i in lPage %}
+                <tr style="font-size: 14px;">
+                    <td>{{ i.pmname }}</td>
+                    <td>{{ i.ip}}</td>
+                    <td>{{ i.ilo_ip}}</td>
+                    <td>{{ i.sn}}</td>
+                    <td>{{ i.position}}</td>
+                    <td>{{ i.jiguiwei}}</td>
+                    <td>{{ i.jiguihao}}</td>
+                    <td>{{ i.pmtype}}</td>
+                    <td>{{ i.os}}</td>
+                    <td>{{ i.cluster|default:"----"}}</td>
+                    <td class="host_buttom">
+                        <a class="btn btn-warning btn-xs"  href={% url "pmedit" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>
+                        <a class="btn btn-danger btn-xs" href={% url "pmdelete" i.id %} onclick="return confirm('是否确认删除？')">删除</a>
+                        <a class="btn btn-primary btn-xs" href={% url "pmrepl" i.id %} onclick="return confirm('是否确认复制？')">复制</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+    {% include "common/paginator.html" %}
+<script>
+   function is_submit(value){
+      var form=$("#pmqueryForm") 
+      if (value==1){
+         form.action="{% url 'pmquery' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+      if (value==2){
+         form.action="{% url 'pmexport' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+   }
+</script>
+{% endblock %}

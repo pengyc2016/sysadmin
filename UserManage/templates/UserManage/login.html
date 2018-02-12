@@ -1,0 +1,31 @@
+{% extends "common/base.nav.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <div class="container" >
+        <form class="form-horizontal form-signin" role="form" action={% url "loginurl" %} method="POST" >
+        {% csrf_token %}
+            {% for item in form %}
+                <div class="form-group">
+                    <label class="control-label col-md-1 col-sm-2 col-md-offset-4">{{item.label}}</label>
+                    <div class="col-md-3 col-sm-6">
+                        {{item}}
+                    </div>
+                    <div class="col-md-offset-5 col-sm-offset-10 col-md-3 col-sm-6">
+                        {{item.errors}} {{error_msg}}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="form-group">
+                <div class="col-md-offset-5 col-sm-offset-8 col-md-3 ">
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <button type="submit" class="btn btn-success btn-sm btn-block ">登 录</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

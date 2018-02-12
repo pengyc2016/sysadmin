@@ -1,0 +1,87 @@
+{% extends "common/base.side.html" %}
+{% block title %}
+    Zookeeper安装
+{% endblock %}
+
+{% block rcontent %}
+<!--
+<script >
+        $(document).ready(function(){
+            $ajaxSetup({
+                data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+            }); 
+
+            $('#zookeeperForm').submit(function(){
+                var zookeeperlist = $('#id_zookeeperlist').val();
+                var zookeeperversion = $('#id_zookeeperversion').val();
+                var password = $('#id_password').val();
+                
+                $.ajax({
+                    type:"POST",
+		    data:{'zookeeperlist':zookeeperlist,'zookeeperversion':zookeeperversion,'password':password},   
+                    url: "/install/zookeeper/",
+                    dateType:"html",
+                    cache:"false"
+                    success:function(ret){$('#result').html(ret);}
+                    /*
+                    success:function(data){
+                        $("#id_zookeeperlist").show();
+                        $("#id_apachelist").show();
+                        $("#id_zookeeperversion").show();
+                        $("#id_sysname").show();
+                        $("#id_password").show();
+                        $("#result").show();
+                        $("#result").attr("value",data);
+                    } */
+                });
+
+             /* $.get("/install/zookeeper/",{'zookeeperlist':zookeeperlist,'apachelist':apachelist,'zookeeperversion':zookeeperversion,'sysname':sysname,'password':password},function(ret){$('#result').html(ret)}) */
+                  
+            });
+        });
+
+</script>
+-->
+
+<div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "zookeeper" as thezookeeper %}
+            <a class="btn btn-default {%if request.path = thezookeeper %} active {%endif%}" href={{ thezookeeper }}><span class="glyphicon glyphicon-edit"></span>ZOOKEEPER安装</a>
+            {% url "zookeeperhelp" as thezookeeperhelp %}
+            <a class="btn btn-default {%if request.path =  thezookeeperhelp %} active {%endif%}" href={{ thezookeeperhelp }}><span class="glyphicon glyphicon-list"></span>安装帮助</a>
+        </div>
+    </div>
+
+    <hr/>
+  
+    <form class="form-horizontal " id="zookeeperForm" role="form" action={% url "zookeeper" %} method="POST" >
+        {% csrf_token %}
+        {% for item in form %}
+            <div class="form-group">
+                <label class="col-md-2 control-label customlabel">{{item.label}}</label>
+                <div class="col-md-4">
+                    {{item}}
+                </div>
+                <div class="col-md-offset-2 col-md-4">
+                    {{item.errors}}
+                </div>
+            </div>
+        {% endfor %}
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <button type="submit" id="install" class="btn btn-primary btn-default btn-block ">安装</button>
+            </div>
+        </div>
+        <hr/>
+        <h3 class="customlabel">日志输出:</h3>
+        <div class="form-group">
+		<textarea class="form-control" rows="10" id="result" name="result" >{{ result }}</textarea>
+	</div>
+    </form>
+{% endblock %}
+
+
+
+

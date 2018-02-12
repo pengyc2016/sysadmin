@@ -1,0 +1,62 @@
+{% extends "common/base.side.html" %}
+{% block title %}
+    MongoDB安装帮助
+{% endblock %}
+
+{% block rcontent %}
+<div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "mongo" as themongo %}
+            <a class="btn btn-default {%if request.path = themongo %} active {%endif%}" href={{ themongo }}><span class="glyphicon glyphicon-edit"></span>MongoDB主从安装</a>
+            {% url "mongoreplset" as themongoreplset %}
+            <a class="btn btn-default {%if request.path =  themongoreplset %} active {%endif%}" href={{ themongoreplset }}><span class="glyphicon glyphicon-list"></span>MongoDB副本集安装</a>
+            {% url "mongocluster" as themongocluster %}
+            <a class="btn btn-default {%if request.path = themongocluster %} active {%endif%}" href={{ themongocluster }}><span class="glyphicon glyphicon-edit"></span>MongoDB分片集群安装</a>
+            {% url "mongohelp" as themongohelp %}
+            <a class="btn btn-default {%if request.path =  themongohelp %} active {%endif%}" href={{ themongohelp }}><span class="glyphicon glyphicon-list"></span>安装帮助</a>
+        </div>
+    </div>
+
+    <hr/>
+<style type="text/css">
+h3{
+  color:blue;
+}
+h5{
+  font-size: 14px;
+  font-weight:normal;
+}
+</style>
+
+
+    <div >
+    <h3>安装原理</h3>
+    <ol>
+        <li><h5>通过表单获取安装ip地址、版本、等相关信息</h5></li>
+        <li><h5>通过内部逻辑处理，生成MongoDB密钥字符串</h5></li>
+        <li><h5>将上述信息通过位置变量传递给shell脚本</h5></li>
+        <li><h5>通过python调用22.188.62.20上的MongoDB脚本安装</h5></li>
+    </ol>
+    <hr/>
+
+    <h3 >使用范围</h3>
+    <ol>
+        <li><h5>服务保障环境</h5></li>
+    </ol>
+    <hr/>
+    <h3 style="color:red;">注意事项</h3>
+    <ol >
+        <li><h5 >请确保机器GSS关闭，避免ssh连接超时</h5></li>
+        <li><h5 >主从MongoDB的个数一般为2个</h5></li>
+        <li><h5 >副本集MongoDB的个数一般为3个，其中一个为仲裁节点</h5></li>
+        <li><h5 >分片MongoDB的个数不定，但配置和路由服务器以基数个为宜</h5></li>
+        <li><h5 >MongoDB默认安装在/opt目录下，如需更改，请修改相关脚本下的basedir变量</h5></li>
+    </ol>
+    <hr/>
+    </div>
+  
+{% endblock %}
+
+
+
+

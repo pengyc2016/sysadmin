@@ -1,0 +1,49 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    存储展示
+{% endblock %}
+
+{% block rcontent %}
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "storagelist" as thestoragelist %}
+            <a class="btn btn-default {%if request.path = thestoragelist %} active {%endif%}" href={{ thestoragelist }}><span class="glyphicon glyphicon-edit"></span>存储展示</a>
+            {% url "storageinput" as thestorageinput %}
+            <a class="btn btn-default {%if request.path =  thestorageinput %} active {%endif%}" href={{ thestorageinput }}><span class="glyphicon glyphicon-list"></span>存储录入</a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>存储名称</th>
+            <th>存储大小(G)</th>
+            <th>存储类型</th>
+            <th>RAID类型</th>
+            <th>所属存储组</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+
+            {% for i in lPage %}
+                <tr style="font-size: 14px;">
+                    <td>{{ i.storagename }}</td>
+                    <td>{{ i.storagesize}}</td>
+                    <td>{{ i.storagetype}}</td>
+                    <td>{{ i.raidtype}}</td>
+                    <td>{{ i.storagegroup}}</td>
+                    <td>{{ i.remark}}</td>
+                    <td class="host_buttom">
+                        <a class="btn btn-warning btn-xs"  href={% url "storageedit" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>
+                        <a class="btn btn-danger btn-xs" href={% url "storagedelete" i.id %} onclick="return confirm('是否确认删除？')">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+    {% include "common/paginator.html" %}
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "common/base.side.html" %}
+{% block title %}
+    mongodb安装
+{% endblock %}
+
+{% block rcontent %}
+<!--
+<script >
+        $(document).ready(function(){
+            $ajaxSetup({
+                data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+            }); 
+
+            $('#mongoForm').submit(function(){
+                var mongolist = $('#id_mongolist').val();
+                var apachelist = $('#id_apachelist').val();
+                var mongoversion = $('#id_mongoversion').val();
+                var sysname = $('#id_sysname').val();
+                var password = $('#id_password').val();
+                
+                $.ajax({
+                    type:"POST",
+		    data:{'mongolist':mongolist,'apachelist':apachelist,'mongoversion':mongoversion,'sysname':sysname,'password':password},   
+                    url: "/install/mongo/",
+                    dateType:"html",
+                    cache:"false"
+                    success:function(ret){$('#result').html(ret);}
+                    /*
+                    success:function(data){
+                        $("#id_mongolist").show();
+                        $("#id_apachelist").show();
+                        $("#id_mongoversion").show();
+                        $("#id_sysname").show();
+                        $("#id_password").show();
+                        $("#result").show();
+                        $("#result").attr("value",data);
+                    } */
+                });
+
+             /* $.get("/install/mongo/",{'mongolist':mongolist,'apachelist':apachelist,'mongoversion':mongoversion,'sysname':sysname,'password':password},function(ret){$('#result').html(ret)}) */
+                  
+            });
+        });
+
+</script>
+-->
+
+<div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "mongo" as themongo %}
+            <a class="btn btn-default {%if request.path = themongo %} active {%endif%}" href={{ themongo }}><span class="glyphicon glyphicon-edit"></span>MongoDB主从安装</a>
+            {% url "mongoreplset" as themongoreplset %}
+            <a class="btn btn-default {%if request.path =  themongoreplset %} active {%endif%}" href={{ themongoreplset }}><span class="glyphicon glyphicon-list"></span>MongoDB副本集安装</a>
+            {% url "mongocluster" as themongocluster %}
+            <a class="btn btn-default {%if request.path = themongocluster %} active {%endif%}" href={{ themongocluster }}><span class="glyphicon glyphicon-edit"></span>MongoDB分片集群安装</a>
+            {% url "mongohelp" as themongohelp %}
+            <a class="btn btn-default {%if request.path =  themongohelp %} active {%endif%}" href={{ themongohelp }}><span class="glyphicon glyphicon-list"></span>安装帮助</a>
+        </div>
+    </div>
+
+    <hr/>
+  
+    <form class="form-horizontal " id="mongoForm" role="form" action={% url "mongo" %} method="POST" >
+        {% csrf_token %}
+        {% for item in form %}
+            <div class="form-group">
+                <label class="col-md-2 control-label customlabel">{{item.label}}</label>
+                <div class="col-md-4">
+                    {{item}}
+                </div>
+                <div class="col-md-offset-2 col-md-4">
+                    {{item.errors}}
+                </div>
+            </div>
+        {% endfor %}
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <button type="submit" id="install" class="btn btn-primary btn-default btn-block ">安装</button>
+            </div>
+        </div>
+        <hr/>
+        <h3 class="customlabel">日志输出:</h3>
+        <div class="form-group">
+		<textarea class="form-control" rows="10" id="result" name="result" >{{ result }}</textarea>
+	</div>
+    </form>
+{% endblock %}
+
+
+
+

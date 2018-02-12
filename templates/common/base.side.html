@@ -1,0 +1,111 @@
+{% extends "common/base.nav.html" %}
+
+{% block content %}
+    <div class="container" style="width:95%">
+        <div class="row">
+
+            <!-- 侧边栏 -->
+            <div class="col-md-2"> 
+                {% if user.is_authenticated %}
+                    <div class="panel-group" id="accordion">
+
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed"><span class="glyphicon glyphicon-list-alt btn-xs"></span>用户管理 </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse {% if 'accounts' in request.path %} in {% endif %}">
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listuserurl" %}>用户管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroleurl" %}>角色管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listpermissionurl" %}>权限管理</a></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThird" class="collapsed"><span class="glyphicon glyphicon-list-alt btn-xs"></span>安装管理</a>
+                                </h4>
+                            </div>
+                            <div id="collapseThird" class="panel-collapse collapse {% if 'install' in request.path %} in {% endif %}">
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "jboss" %}>JBOSS安装</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "apache" %}>APACHE安装</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "zookeeper" %}>ZooKeeper安装</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "mongo" %}>MongoDB安装</a></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        
+
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" class="collapsed"><span class="glyphicon glyphicon-list-alt btn-xs"></span>项目管理</a>
+                                </h4>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse {% if 'project' in request.path %} in {% endif %}">
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "projectlist" %}>项目管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "clusterlist"%}>集群管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "vmlist" %}>虚机机管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "pmlist" %}>物理机管理</a></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> 
+                        </div>
+                        
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse7" class="collapsed"><span class="glyphicon glyphicon-list-alt btn-xs"></span>资源管理</a>
+                                </h4>
+                            </div>
+                            <div id="collapse7" class="panel-collapse collapse {% if 'resource' in request.path %} in {% endif %}">
+                                <div class="panel-body">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "domainlist"%}>域控管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "softwarelist"%}>软件管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "vlanlist" %}>网段管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "storagelist" %}>存储管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "vlangrouplist" %}>网段组管理</a></td></tr>
+                                            <tr><td><span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "storagegrouplist" %}>存储组管理</a></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> 
+                        </div>
+                     </div>
+
+
+                {% endif %}
+            </div>
+
+            <!-- 内容区域 -->
+            <div class="col-md-10">
+                {% block rcontent %}{% endblock %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

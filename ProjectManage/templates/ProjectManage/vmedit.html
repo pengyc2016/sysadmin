@@ -1,0 +1,241 @@
+{% extends "common/base.side.html" %}
+{% block title %}
+    虚拟机更新
+{% endblock %}
+
+{% block rcontent %}
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "vmlist" as thevmlist %}
+            <a class="btn btn-default {%if request.path = thevmlist %} active {%endif%}" href={{ thevmlist }}><span class="glyphicon glyphicon-edit"></span
+>虚拟机展示</a>
+            {% url "vminput" as thevminput %}
+            <a class="btn btn-default {%if request.path =  thevminput %} active {%endif%}" href={{ thevminput }}><span class="glyphicon glyphicon-list"></s
+pan>虚拟机录入</a>
+        </div>
+    </div>
+
+    <hr/>
+
+<form class="form-horizontal" role="form" action={% url "vmedit" num %} method="POST" >
+            {% csrf_token %}
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">虚拟机名称</label>
+                <div class="col-md-4">
+                    {{form.vmname}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.vmname.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">所属项目</label>
+                <div class="col-md-4">
+                    {{form.project}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.project.errors}}
+                </div>
+            </div>
+            <div id="cluster_div" class="form-group">
+                <label  id="cluster_label" class="col-md-1 control-label ">所属集群</label>
+                <div class="col-md-4">
+                    {{form.cluster}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.cluster.errors}}
+                </div>
+            </div>
+            <div id="pm_div" class="form-group">
+                <label  id="pm_label" class="col-md-1 control-label ">所属物理机</label>
+                <div class="col-md-4">
+                    {{form.pm}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.pm.errors}}
+                </div>
+            </div>
+            <div id="role_div" class="form-group">
+                <label  id="role_label" class="col-md-1 control-label ">功能</label>
+                <div class="col-md-4">
+                    {{form.role}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.role.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">操作系统</label>
+                <div class="col-md-4">
+                    {{form.os}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.os.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">安装软件</label>
+                <div class="col-md-4">
+                    {{form.soft}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.soft.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">CPU</label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                    {{form.cpu}}
+                    <span class="input-group-addon">C</span>
+                    </div>
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.cpu.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">内存大小</label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                    {{form.mem}}
+                    <span class="input-group-addon">M</span>
+                    </div>
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.mem.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">磁盘大小</label>
+                <div class="col-md-4">
+                    <div class="input-group">
+                    {{form.disk}}
+                    <span class="input-group-addon">G</span>
+                    </div>
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.disk.errors}}
+                </div>
+            </div>
+	    <div class="form-group">
+                <label  class="col-md-1 control-label ">地址个数</label>
+	        <div class="col-md-4">
+		   <div class="input-group">
+		      <!--<input type="text" class="form-control" id="ipcount",name="ipcount">-->
+                      <select class="form-control" id="ipcount" name="ipcount" onchange="javascript:ipshuli();return false;">
+                         <option value="" selected="selected">---------</option>
+                         <option value="1">标准分配一个地址</option>
+                         <option value="2">高可用服务添加vip分配两个地址</option>
+                         <option value="3">RAC需SCANIP分配三个地址</option>
+                      </select>
+		      <span class="input-group-btn">
+			 <button class="btn btn-default" id="feipei" name="feipei" type="button">分配</button>
+		      </span>
+		   </div>
+		</div>
+	    </div>
+
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">IP地址</label>
+                <div class="col-md-4">
+                    {{form.ip}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.ip.errors}}
+                </div>
+            </div>
+            <div class="form-group" id="vip_div" style="display:none">
+                <label  class="col-md-1 control-label ">VIP地址</label>
+                <div class="col-md-4" id="vip">
+                    {{form.vip}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.vip.errors}}
+                </div>
+            </div>
+            <div class="form-group" id="scanip_div" style="display:none">
+                <label  class="col-md-1 control-label ">SCANIP地址</label>
+                <div class="col-md-4" id="scanip">
+                    {{form.scan}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.scan.errors}}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">子网掩码</label>
+                <div class="col-md-4">
+                    {{form.mask}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.mask.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">网关</label>
+                <div class="col-md-4">
+                    {{form.gateway}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.gateway.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">所在域</label>
+                <div class="col-md-4">
+                    {{form.domain}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.domain.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">管理员</label>
+                <div class="col-md-4">
+                    {{form.admin}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.admin.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-md-1 control-label ">应用用户</label>
+                <div class="col-md-4">
+                    {{form.appuser}}
+                </div>
+                <div class="col-md-offset-1 col-md-11">
+                    {{form.appuser.errors}}
+                </div>
+            </div>
+            <div class="form-group">
+               <div class="col-md-offset-1 col-md-4">
+                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('确认更新吗？')">更 新</button>
+               </div>
+            </div>
+    </form>
+<script src="/static/js/vm.js"></script>
+<script type="text/javascript">  
+    $(function(){  
+        $("#feipei").click(function(){  
+            $.ajax({  
+                type: "GET",  
+                url: "/project/vm/getip/",  
+                dateType: "json",  
+                data:{'ipcount':$("#ipcount").val(),'ID':$("#id_cluster").val()},  
+                success: function(returnedData){  
+                    $("#id_ip").val(returnedData['ip']);  
+                    $("#vip").val(returnedData['vip']);  
+                    $("#scanip").val(returnedData['scanip']);  
+                    $("#id_gateway").val(returnedData['gateway']);  
+                    $("#id_mask").val(returnedData['mask']);  
+                }  
+                  
+            });  
+        });  
+    });  
+      
+</script>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    软件展示
+{% endblock %}
+
+{% block rcontent %}
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "softwarelist" as thesoftwarelist %}
+            <a class="btn btn-default {%if request.path = thesoftwarelist %} active {%endif%}" href={{ thesoftwarelist }}><span class="glyphicon glyphicon-edit"></span>软件展示</a>
+            {% url "softwareinput" as thesoftwareinput %}
+            <a class="btn btn-default {%if request.path =  thesoftwareinput %} active {%endif%}" href={{ thesoftwareinput }}><span class="glyphicon glyphicon-list"></span>软件录入</a>
+        </div>
+    </div>
+
+    <hr/>
+    <form class="form-inline" id="softwarequeryForm" role="form" action={% url "softwarequery" %} method="GET">
+        <div class="form-group">
+            <label class="sr-only" for="softwarefullname">软件全名</label>
+            <input type="text" class="form-control" id="softwarefullname" name="softwarefullname" placeholder="软件全名">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="softwarename">软件名称</label>
+            <input type="text" class="form-control" id="softwarename" name="softwarename" placeholder="软件名称">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="version">软件版本</label>
+            <input type="text" class="form-control" id="version" name="version" placeholder="软件版本">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="platform">软件平台</label>
+            <input type="text" class="form-control" id="platform"  name="platform" placeholder="软件平台">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="arch">软件架构</label>
+            <input type="text" class="form-control" id="arch"  name="arch" placeholder="软件架构">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="softtype">软件类型</label>
+            <input type="text" class="form-control" id="softtype" name="softtype" placeholder="软件类型">
+       </div>
+       <button type="submit" class="btn btn-default">查询</button>
+</form>
+    <hr/>
+
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>软件全名</th>
+            <th>软件名称</th>
+            <th>软件版本</th>
+            <th>软件平台</th>
+            <th>软件架构</th>
+            <th>软件类型</th>
+            <th>软件文档</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+
+            {% for i in lPage %}
+                <tr style="font-size: 14px;">
+                    <td>{{ i.softwarefullname }}</td>
+                    <td>{{ i.softwarename }}</td>
+                    <td>{{ i.version}}</td>
+                    <td>{{ i.platform}}</td>
+                    <td>{{ i.arch}}</td>
+                    <td>{{ i.softtype}}</td>
+                    <td>{{ i.doc}}</td>
+                    <td>{{ i.beizhu}}</td>
+                    <td class="host_buttom">
+                        <a class="btn btn-warning btn-xs"  href={% url "softwareedit" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>
+                        <a class="btn btn-danger btn-xs" href={% url "softwaredelete" i.id %} onclick="return confirm('是否确认删除？')">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+    {% include "common/paginator.html" %}
+{% endblock %}

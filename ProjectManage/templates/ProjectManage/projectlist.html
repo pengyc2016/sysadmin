@@ -1,0 +1,95 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    项目展示
+{% endblock %}
+
+{% block rcontent %}
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "projectlist" as theprojectlist %}
+            <a class="btn btn-default {%if request.path = theprojectlist %} active {%endif%}" href={{ theprojectlist }}><span class="glyphicon glyphicon-edit"></span>项目展示</a>
+            {% url "projectinput" as theprojectinput %}
+            <a class="btn btn-default {%if request.path =  theprojectinput %} active {%endif%}" href={{ theprojectinput }}><span class="glyphicon glyphicon-list"></span>项目录入</a>
+        </div>
+    </div>
+
+    <hr/>
+    <form class="form-inline" id="projectqueryForm" role="form" action="" method="GET">
+  	<div class="form-group">
+            <label class="sr-only" for="env">环境</label>
+            <input type="text" class="form-control" id="env" name="env" placeholder="环境">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="shortname">简称</label>
+            <input type="text" class="form-control" id="shortname" name="shortname" placeholder="项目简称">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="projectname">项目名称</label>
+            <input type="text" class="form-control" id="projectname"  name="projectname" placeholder="项目名称">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="batch">项目批次</label>
+            <input type="text" class="form-control" id="batch" name="batch" placeholder="项目批次">
+       </div>
+
+        <div class="form-group">
+            <label class="sr-only" for="createuser">搭建人员</label>
+            <input type="text" class="form-control" id="createuser" name="createuser" placeholder="搭建人员">
+       </div>
+       <button type="button" class="btn btn-default" onclick="is_submit(1)">查询</button>
+       <button type="button" class="btn btn-primary" onclick="is_submit(2)">导出项目</button>
+    </form>
+
+    <hr/>
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>环境</th>
+            <th>项目简称</th>
+            <th>项目名称</th>
+            <th>安排人员</th>
+            <th>到达时间</th>
+            <th>截止时间</th>
+            <th>完成时间</th>
+            <th>批次</th>
+            <th>操作</th>
+        </tr>
+
+            {% for i in lPage %}
+                <tr style="font-size: 14px;">
+                    <td>{{ i.env }}</td>
+                    <td>{{ i.shortname}}</td>
+                    <td>{{ i.projectname}}</td>
+                    <td>{{ i.createuser|default:"----"}}</td>
+                    <td>{{ i.starttime|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ i.endtime|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ i.finishtime|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ i.batch}}</td>
+                    <td class="host_buttom">
+                        <a class="btn btn-warning btn-xs"  href={% url "projectedit" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>
+                        <a class="btn btn-danger btn-xs" href={% url "projectdelete" i.id %} onclick="return confirm('是否确认删除？')">删除</a>
+                        <a class="btn btn-primary btn-xs" href={% url "projectshowvm" i.id %} >VM</a>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+    {% include "common/paginator.html" %}
+<script>
+   function is_submit(value){
+      var form=$("#projectqueryForm") 
+      if (value==1){
+         form.action="{% url 'projectquery' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+      if (value==2){
+         form.action="{% url 'projectexport' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+   }
+</script>
+{% endblock %}

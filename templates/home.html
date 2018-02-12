@@ -1,0 +1,267 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    首页
+{% endblock %}
+
+{% block rcontent %}
+<div class="container-fluid">
+<div class="row-fluid">
+  <div class="span6" id="work" style="height:300px;"></div>
+  <div class="span6" id="ziyuan" style="height:300px;"></div>
+</div>
+<div class="row-fluid">
+  <div class="span6" id="wuliji" style="height:300px;">
+  </div>
+  <div class="span6" id = "xuniji" style="height:300px;">
+  </div>
+</div>
+</div>
+<script type="text/javascript">
+
+var Dict ={{ Dict|safe}}
+var project=Dict['project']
+var pm=Dict['pm']
+var vm=Dict['vm']
+var cluster=Dict['cluster']
+var storage=Dict['storage']
+var cpu=Dict['cpu']
+var mem=Dict['mem']
+var usedstorage=Dict['usedstorage']
+var usedcpu=Dict['usedcpu']
+var usedmem=Dict['usedmem']
+var systorage=Dict['systorage']
+var sycpu=Dict['sycpu']
+var symem=Dict['symem']
+var soft=Dict['soft']
+var djszwlj=Dict['djszwlj']
+var jqszwlj=Dict['jqszwlj']
+var wldj=Dict['wldj']
+var linux=Dict['linux']
+var windows=Dict['windows']
+var othervm=Dict['othervm']
+
+var work = echarts.init(document.getElementById('work'));
+workoption = {
+    title : {
+        text: '工作量统计',
+        x:'center',
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    legend: {
+        x : 'center',
+        data:['工作量'],
+        padding:30,
+        //itemGap:20,
+    },
+    toolbox: {
+        show : false,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {show: true, type: ['line', 'bar']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    xAxis : [
+        {
+            type : 'category',
+            data : ['项目总数','物理机总数','虚拟机总数','集群总数'],
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            splitNumber: 5,
+            //axisLabel:{formatter:'{value} G'}
+            //splitLine:{show:false},
+        }
+    ],
+    series : [
+        {
+            name:'工作量',
+            type:'bar',
+            data:[project,pm,vm,cluster],
+        },
+    ],
+};
+work.setOption(workoption);
+
+var xuniji = echarts.init(document.getElementById('xuniji'));
+xunijioption = {
+    //color :['red','blue','black','gray','yellow','orange'],
+    title : {
+        text: '虚拟机统计',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        padding:30,
+        itemGap:15,
+        data:['Linux虚拟机','Windows虚拟机','其他虚拟机']
+    },
+    toolbox: {
+        show : false,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'虚拟机统计',
+            type:'pie',
+            radius :[0, '60%'],
+            center: ['50%', '50%'],
+            data:[
+                {value:linux, name:'Linux虚拟机'},
+                {value:windows, name:'Windows虚拟机'},
+                {value:othervm, name:'其他虚拟机'},
+            ]
+        }
+    ]
+};
+xuniji.setOption(xunijioption);
+
+var wuliji = echarts.init(document.getElementById('wuliji'));
+wulijioption = {
+    color :['green','gray','orange','red','blue','black'],
+    title : {
+        text: '物理机统计',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient : 'vertical',
+        x : 'left',
+        padding:30,
+        itemGap:15,
+        data:['集群宿主物理机','单机宿主物理机','物理单机']
+    },
+    toolbox: {
+        show : false,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {
+                show: true, 
+                type: ['pie', 'funnel'],
+                option: {
+                    funnel: {
+                        x: '25%',
+                        width: '50%',
+                        funnelAlign: 'left',
+                        max: 1548
+                    }
+                }
+            },
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    series : [
+        {
+            name:'物理机统计',
+            type:'pie',
+            radius :[0, '60%'],
+            center: ['50%', '50%'],
+            data:[
+                {value:jqszwlj, name:'集群宿主物理机'},
+                {value:djszwlj, name:'单机宿主物理机'},
+                {value:wldj, name:'物理单机'},
+            ]
+        }
+    ]
+};
+wuliji.setOption(wulijioption);
+
+var ziyuan = echarts.init(document.getElementById('ziyuan'));
+ziyuanoption = {
+    color :['blue','red','green'],
+    title : {
+        text: '资源统计',
+        x:'center',
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    legend: {
+        x : 'center',
+        data:['总量','使用量','可用量'],
+        padding:30,
+        //itemGap:20,
+    },
+    toolbox: {
+        show : false,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {show: true, type: ['line', 'bar']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    xAxis : [
+        {
+            type : 'category',
+            data : ['存储','CPU','内存'],
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            splitNumber: 5,
+            axisLabel:{formatter:'{value} G'}
+            //splitLine:{show:false},
+        }
+    ],
+    series : [
+        {
+            name:'总量',
+            type:'bar',
+            data:[storage,cpu,mem],
+        },
+        {
+            name:'使用量',
+            type:'bar',
+            data:[usedstorage,usedcpu,usedmem],
+        },
+        {
+            name:'可用量',
+            type:'bar',
+            data:[systorage,sycpu,symem],
+        },
+    ]
+};
+ziyuan.setOption(ziyuanoption);
+</script>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "common/base.side.html" %}
+
+{% block title %}
+    虚拟机展示
+{% endblock %}
+
+{% block rcontent %}
+
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "vmlist" as thevmlist %}
+            <a class="btn btn-default {%if request.path = thevmlist %} active {%endif%}" href={{ thevmlist }}><span class="glyphicon glyphicon-edit"></span>虚拟机展示</a>
+            {% url "vminput" as thevminput %}
+            <a class="btn btn-default {%if request.path =  thevminput %} active {%endif%}" href={{ thevminput }}><span class="glyphicon glyphicon-list"></span>虚拟机录入</a>
+        </div>
+    </div>
+
+    <hr/>
+    <form class="form-inline" id="vmqueryForm" role="form" action=""  method="GET">
+        
+        <div class="form-group">
+            <label class="sr-only" for="vmname">虚拟机名称</label>
+            <input type="text" class="form-control" id="vmname" name="vmname" placeholder="虚拟机名称">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="project">项目名称</label>
+            <input type="text" class="form-control" id="project" name="project" placeholder="项目名称">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="ip">IP地址</label>
+            <input type="text" class="form-control" id="ip"  name="ip" placeholder="ip地址">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="role">服务器功能</label>
+            <input type="text" class="form-control" id="role" name="role" placeholder="服务器功能">
+       </div>
+        <div class="form-group">
+            <label class="sr-only" for="os">操作系统</label>
+            <input type="text" class="form-control" id="os" name="os" placeholder="操作系统">
+       </div>
+
+       <button type="button" class="btn btn-default" onclick="is_submit(1)">查询</button>
+       <button type="button" class="btn btn-primary" onclick="is_submit(2)">导出虚拟机</button>
+</form>
+    <hr/>
+
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>名称</th>
+            <th>项目</th>
+            <th>服务器功能</th>
+            <th>安装软件</th>
+            <th>IP地址</th>
+            <th>状态</th>
+            <th>开机时间</th>
+            <th>操作</th>
+        </tr>
+
+            {% for i in lPage %}
+                <tr style="font-size: 14px;">
+                    <td>{{ i.vmname }}</td>
+                    <td>{{ i.project|default:"----"}}</td>
+                    <td>{{ i.role}}</td>
+                    <td>{{ i.soft|default:"----"}}</td>
+                    <td>{{ i.ip}}</td>
+                    <td>
+                        {% if i.vmstatus %}
+                            <span class="label label-success">UP</span>
+                        {% else %}
+                            <span class="label label-default">Down</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ i.uptime}}</td>
+                    <td class="host_button">
+                        <a class="btn btn-warning btn-xs"  href={% url "vmedit" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>
+                        <a class="btn btn-primary btn-xs" href={% url "vmrepl" i.id %} onclick="return confirm('是否确认复制？')">复制</a>
+                        <a class="btn btn-danger btn-xs"  href={% url "vmdelete" i.id %} onclick="return confirm('是否确认删除？')">删除</a>
+                        <button type="button" class="btn btn-info btn-xs" value ="{{ i.id }}" onclick='is_update(this.value)'>更新</button>
+                        <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal_{{i.id}}">详细信息</button>
+                <div class="modal fade" id="myModal_{{i.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">{{i.vmname}}详细信息</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table width="400" class="table table-hover table-striped  table-bordered table-condensed">
+                                    <tr>
+                                    <th width="100">类型</th>
+                                    <th>值</th>
+                                    </tr>
+                                    <tr>
+                                    <td>物理cpu核数</td>
+                                    <td>{{i.pycpu}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>逻辑cpu核数</td>
+                                    <td>{{i.cpu}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>内存大小(M)</td>
+                                    <td>{{i.mem}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>磁盘大小(G)</td>
+                                    <td>{{i.disk}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>磁盘挂载信息</td>
+                                    <td>{{i.diskmount}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>操作系统</td>
+                                    <td>{{i.os|default:"----"}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>系统架构</td>
+                                    <td>{{i.arch}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>内核版本</td>
+                                    <td>{{i.kernel}}</td>
+                                    </tr>
+                                 </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+
+
+
+    {% include "common/paginator.html" %}
+<script>
+   function is_submit(value){
+      var form=$("#vmqueryForm") 
+      if (value==1){
+         form.action="{% url 'vmquery' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+      if (value==2){
+         form.action="{% url 'vmexport' %}";
+         form.attr("action",form.action);
+         form.submit();
+      }  
+   }
+    function is_update(id){
+        $.ajax({
+            url: "/project/vm/update/"+id,
+            dataType:"json",
+            type:"GET",
+            //success:function(arg){ alert(JSON.stringify(arg));},
+            //success:function(){swal("更新成功");} 
+            //error:function(){swal("更新失败");}
+            success:function(arg){
+             if(arg.code === 200){swal(arg.ip+arg.msg)}
+             else{swal(arg.ip+arg.msg)}
+           },
+            error:function(){swl(arg.ip+"请求更新失败")}
+        });
+    }
+</script>
+
+{% endblock %}

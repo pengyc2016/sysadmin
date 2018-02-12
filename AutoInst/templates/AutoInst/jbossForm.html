@@ -1,0 +1,98 @@
+{% extends "common/base.side.html" %}
+{% block title %}
+    JBoss安装
+{% endblock %}
+
+{% block rcontent %}
+<!--
+<script >
+        $(document).ready(function(){
+            $ajaxSetup({
+                data:{csrfmiddlewaretoken:'{{csrf_token}}'},
+            }); 
+
+            $('#jbossForm').submit(function(){
+                var jbosslist = $('#id_jbosslist').val();
+                var apachelist = $('#id_apachelist').val();
+                var jbossversion = $('#id_jbossversion').val();
+                var sysname = $('#id_sysname').val();
+                var password = $('#id_password').val();
+                
+                $.ajax({
+                    type:"POST",
+		    data:{'jbosslist':jbosslist,'apachelist':apachelist,'jbossversion':jbossversion,'sysname':sysname,'password':password},   
+                    url: "/install/jboss/",
+                    dateType:"html",
+                    cache:"false"
+                    success:function(ret){$('#result').html(ret);}
+                    /*
+                    success:function(data){
+                        $("#id_jbosslist").show();
+                        $("#id_apachelist").show();
+                        $("#id_jbossversion").show();
+                        $("#id_sysname").show();
+                        $("#id_password").show();
+                        $("#result").show();
+                        $("#result").attr("value",data);
+                    } */
+                });
+
+             /* $.get("/install/jboss/",{'jbosslist':jbosslist,'apachelist':apachelist,'jbossversion':jbossversion,'sysname':sysname,'password':password},function(ret){$('#result').html(ret)}) */
+                  
+            });
+        });
+
+</script>
+-->
+
+<div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "jboss" as thejboss %}
+            <a class="btn btn-default {%if request.path = thejboss %} active {%endif%}" href={{ thejboss }}><span class="glyphicon glyphicon-edit"></span>JBOSS安装</a>
+            {% url "jbosshelp" as thejbosshelp %}
+            <a class="btn btn-default {%if request.path =  thejbosshelp %} active {%endif%}" href={{ thejbosshelp }}><span class="glyphicon glyphicon-list"></span>安装帮助</a>
+        </div>
+    </div>
+
+    <hr/>
+  
+    <form class="form-horizontal " id="jbossForm" role="form" action={% url "jboss" %} method="POST" >
+        {% csrf_token %}
+        {% for item in form %}
+            <div class="form-group">
+                <label class="col-md-2 control-label customlabel">{{item.label}}</label>
+                <div class="col-md-4">
+                    {{item}}
+                </div>
+                <div class="col-md-offset-2 col-md-4">
+                    {{item.errors}}
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+               <div class="checkbox">
+                   <label>
+                        <input type="checkbox" name="install_apache" id="install_apache" value="yes" > 是否安装Apache
+                   </label>
+               </div> 
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-4">
+                <button type="submit" id="install" class="btn btn-primary btn-default btn-block ">安装</button>
+            </div>
+        </div>
+        <hr/>
+        <h3 class="customlabel">日志输出:</h3>
+        <div class="form-group">
+		<textarea class="form-control" rows="10" id="result" name="result" >{{ result }}</textarea>
+	</div>
+    </form>
+{% endblock %}
+
+
+
+
